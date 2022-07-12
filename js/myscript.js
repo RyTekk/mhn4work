@@ -9,6 +9,7 @@ $(function () {
     var articles = [];
 
     var baseUrl = `https://gnews.io/api/v4/top-headlines?`;
+    var searchUrl = `https://gnews.io/api/v4/search?`;
     baseUrl += `&token=${token}`;
     baseUrl += `&lang=${lang}`;
     baseUrl += `&max=${limit}`;
@@ -30,6 +31,25 @@ $(function () {
             .then(function (data) {
                 articles = data.articles;
                 loading = false;
+                appendToSingleLatestPostElements();
+            });
+    }
+
+    function searchApi() {
+        var keyword = $(".form-control").val();
+        searchUrl += `q=${keyword}`;
+        searchUrl += `&token=${token}`;
+        searchUrl += `&lang=${lang}`;
+
+        fetch(searchUrl)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                articles = data.articles;
+                loading = false;
+                $(".widget-title").html("<h6>Search Results</h6>");
+                $(".single-latest-post").detach();
                 appendToSingleLatestPostElements();
             });
     }
@@ -75,4 +95,6 @@ $(function () {
             singleWidgetAreaElement.append(singleLatestPostBuilder);
         }
     }
+
+    $("button.search-btn").click(searchApi);
 });
