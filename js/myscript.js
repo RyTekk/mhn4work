@@ -14,7 +14,7 @@ $(function () {
     baseUrl += `&max=${limit}`;
 
     if (production) {
-        fetchApi(baseUrl);
+        fetchTopHeadlinesApi(baseUrl);
     } else {
         baseUrl = `./js/mock/articles.json`;
         readJson(baseUrl);
@@ -22,7 +22,7 @@ $(function () {
 
     // todo: show a loading spinner while waiting on an getting data from a service
 
-    function fetchApi(path) {
+    function fetchTopHeadlinesApi(path) {
         fetch(path)
             .then(function (response) {
                 return response.json();
@@ -32,6 +32,43 @@ $(function () {
                 loading = false;
                 appendToSingleLatestPostElements();
             });
+    }
+
+    function searchApi() {
+        var keyword = $(".form-control").val();
+        let searchUrl = `https://gnews.io/api/v4/search?`;
+        searchUrl += `q=${keyword}`;
+        searchUrl += `&token=${token}`;
+        searchUrl += `&lang=${lang}`;
+        searchUrl += `&max=${limit}`; // still need limit here?
+
+        if (keyword.length > 0) {
+            fetch(searchUrl)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    articles = data.articles;
+                    loading = false;
+                    $(".widget-title").html(`<h6>Search Results For: ${keyword}</h6>`);
+                    $(".single-latest-post").detach();
+                    appendToSingleLatestPostElements();
+                    $(".form-control").val("");
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    $(".widget-title").html("<h6>No Result Found</h6>");
+                    $(".single-latest-post").detach();
+                });
+        } else {
+            console.error(baseUrl);
+            // if keyword is empty, get latest posts after 1 seconds
+            setTimeout(() => {
+                fetchTopHeadlinesApi(baseUrl);
+                $(".widget-title").html("<h6>Latest Posts</h6>");
+                $(".single-latest-post").detach();
+            }, 1000);
+        }
     }
 
     function readJson(path) {
@@ -75,4 +112,6 @@ $(function () {
             singleWidgetAreaElement.append(singleLatestPostBuilder);
         }
     }
+
+    $("button.search-btn").click(searchApi);
 });
