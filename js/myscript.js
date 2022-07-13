@@ -54,14 +54,14 @@ $(function () {
                     $(".single-latest-post").detach();
                     appendToSingleLatestPostElements();
                 })
-                .catch(function(err) {
+                .catch(function (err) {
                     console.log(err);
                     $(".widget-title").html("<h6>No Result Found</h6>");
                     $(".single-latest-post").detach();
                 });
         } else {
             console.error(baseUrl);
-            // if clear keyworkds, get latest posts after 1 seconds
+            // if keyword is empty, get latest posts after 1 seconds
             setTimeout(() => {
                 fetchTopHeadlinesApi(baseUrl);
                 $(".single-latest-post").detach();
