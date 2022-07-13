@@ -53,6 +53,7 @@ $(function () {
                     $(".widget-title").html(`<h6>Search Results For: ${keyword}</h6>`);
                     $(".single-latest-post").detach();
                     appendToSingleLatestPostElements();
+                    $(".form-control").val("");
                 })
                 .catch(function (err) {
                     console.log(err);
@@ -64,6 +65,7 @@ $(function () {
             // if keyword is empty, get latest posts after 1 seconds
             setTimeout(() => {
                 fetchTopHeadlinesApi(baseUrl);
+                $(".widget-title").html("<h6>Latest Posts</h6>");
                 $(".single-latest-post").detach();
             }, 1000);
         }
