@@ -35,7 +35,7 @@ $(function () {
     }
 
     function searchApi() {
-        var keyword = $(".form-control").val();
+        var keyword = $(".search-text").val();
         let searchUrl = `https://gnews.io/api/v4/search?`;
         searchUrl += `q=${keyword}`;
         searchUrl += `&token=${token}`;
@@ -53,7 +53,7 @@ $(function () {
                     $(".widget-title").html(`<h6>Search Results For: ${keyword}</h6>`);
                     $(".single-latest-post").detach();
                     appendToSingleLatestPostElements();
-                    $(".form-control").val("");
+                    $(".search-text").val("");
                 })
                 .catch(function (err) {
                     console.log(err);
@@ -69,6 +69,7 @@ $(function () {
                 $(".single-latest-post").detach();
             }, 1000);
         }
+        close();
     }
 
     function readJson(path) {
@@ -113,5 +114,18 @@ $(function () {
         }
     }
 
-    $("button.search-btn").click(searchApi);
+    function show() {
+        $(".backdrop, .box").animate({"opacity":".50"}, 300, "linear");
+        $(".box").animate({"opacity":"1.00"}, 300, "linear");
+        $(".backdrop, .box").css("display", "block");
+    }
+
+    function close() {
+        $(".backdrop, .box").animate({"opacity":".0"}, 300, "linear");
+        $(".backdrop, .box").css("display", "none");
+    }
+
+    $("button.search-btn").click(show);
+    $(".backdrop").click(close);
+    $(".searching").click(searchApi);
 });
