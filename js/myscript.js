@@ -1,6 +1,6 @@
 $(function () {
     // env
-    var production = false;
+    var production = true;
 
     var token = 'be2a4088291293d807d134e681bd5bcc';
     var limit = 5;
@@ -54,20 +54,9 @@ $(function () {
                     $(".single-latest-post").detach();
                     appendToSingleLatestPostElements();
                     $(".search-text").val("");
-                })
-                .catch(function (err) {
-                    console.log(err);
-                    $(".widget-title").html("<h6>No Result Found</h6>");
-                    $(".single-latest-post").detach();
                 });
         } else {
-            console.error(baseUrl);
-            // if keyword is empty, get latest posts after 1 seconds
-            setTimeout(() => {
-                fetchTopHeadlinesApi(baseUrl);
-                $(".widget-title").html("<h6>Latest Posts</h6>");
-                $(".single-latest-post").detach();
-            }, 1000);
+            alert("Keyword is empty!");
         }
         close();
     }
